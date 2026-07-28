@@ -39,13 +39,11 @@ void HandleInput(Game *game)
 void WrapSnake(Game *game)
 {
 	Snake *snake = &game->snake ; 
-	printf("Before wrap: {%d , %d}\n",snake->position.x,snake->position.y);
 	if (snake->position.x < 0)
 	{
-		printf("Wrapping left \n");
 		snake->position.x = game->width - 1;
 	}
-	if (snake->position.x >= game->width - 1)
+	if (snake->position.x > game->width)
 	{
 		snake->position.x = 0;
 	}
@@ -53,7 +51,7 @@ void WrapSnake(Game *game)
 	{
 		snake->position.y = game->height - 1;
 	}
-	if (snake->position.y >= game->height - 1)
+	if (snake->position.y > game->height)
 	{
 		snake->position.y = 0;
 	}
