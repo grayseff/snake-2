@@ -7,6 +7,8 @@ typedef struct
 {
 	int width;
 	int height;
+	
+	float move_delay;
 
 	Snake snake;
 } Game;

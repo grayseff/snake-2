@@ -1,23 +1,33 @@
 #include <raylib.h>
+#include "config.h"
 #include "objects.h"
 #include "game.h"
+#include "render.h"
 int main(void)
 {
-	InitWindow(800, 600, "snake2");
+	InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "snake2");
 	SetTargetFPS(60);
 
-	int x = 100;
-	int y = 100;
 
-	Game game = CreateGame(800,600); 
+	Game game = CreateGame(BOARD_WIDTH,BOARD_HEIGHT); 
 
+	float timer = 0.0f;
 
-	while (!WindowShouldClose()) {
+	while (!WindowShouldClose()) 
+	{
+
+		HandleInput(&game);
+		timer += GetFrameTime();
+
+		if (timer >= game.move_delay)
+		{
+			UpdateGame(&game);
+			timer -= game.move_delay;
+		}
+
 		BeginDrawing();
 		ClearBackground(BLACK);
-		HandleInput(&game);
-		UpdateGame(&game);
-		DrawRectangle(game.snake.position.x, game.snake.position.y, 20, 20, GREEN);
+		DrawGame(&game);
 		EndDrawing();
 	}
 	CloseWindow();

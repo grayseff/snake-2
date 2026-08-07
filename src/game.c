@@ -6,7 +6,7 @@ Game CreateGame(int width, int height)
 	Game game;
 	game.width = width;
 	game.height = height;
-
+	game.move_delay = 0.03f;
 	game.snake.position.x = width / 2;
 	game.snake.position.y = height / 2;
 	game.snake.direction = RIGHT;
@@ -43,15 +43,15 @@ void WrapSnake(Game *game)
 	{
 		snake->position.x = game->width - 1;
 	}
-	if (snake->position.x > game->width)
+	else if (snake->position.x > game->width)
 	{
 		snake->position.x = 0;
 	}
-	if (snake->position.y < 0)
+	else if (snake->position.y < 0)
 	{
 		snake->position.y = game->height - 1;
 	}
-	if (snake->position.y > game->height)
+	else if (snake->position.y > game->height)
 	{
 		snake->position.y = 0;
 	}
