@@ -5,15 +5,16 @@
 
 typedef struct 
 {
-	int width;
-	int height;
+//	int width;
+//	int height;
 	
 	float move_delay;
-
+    
 	Snake snake;
+    Food food;
 } Game;
 
-Game CreateGame(int width, int height);
+Game CreateGame();
 void UpdateGame(Game *game);
 void HandleInput(Game *game);
 

@@ -1,15 +1,15 @@
 #include "game.h"
+#include "objects.h"
 #include <raylib.h>
 #include <stdio.h>
-Game CreateGame(int width, int height)
+#include "config.h"
+Game CreateGame(void)
 {
 	Game game;
-	game.width = width;
-	game.height = height;
+
 	game.move_delay = 0.03f;
-	game.snake.position.x = width / 2;
-	game.snake.position.y = height / 2;
-	game.snake.direction = RIGHT;
+    game.snake = GenerateSnake();
+    game.food.position = GenerateFood(&game.snake);
 
 	return game;
 }
@@ -35,31 +35,49 @@ void HandleInput(Game *game)
 		game->snake.direction = RIGHT;
 	}
 }
+void WrapPosition(Position *position)
+{
+    if (position->x < 0)
+    {
+        position->x = BOARD_WIDTH ;
+    }
+    else if (position->x >= BOARD_WIDTH)
+    {
+        position->x = 0;
+    }
 
+    if (position->y < 0)
+    {
+        position->y = BOARD_HEIGHT;
+    }
+    else if (position->y >= BOARD_HEIGHT)
+    {
+        position->y = 0;
+    }
+}
 void WrapSnake(Game *game)
 {
-	Snake *snake = &game->snake ; 
-	if (snake->position.x < 0)
-	{
-		snake->position.x = game->width - 1;
-	}
-	else if (snake->position.x > game->width)
-	{
-		snake->position.x = 0;
-	}
-	else if (snake->position.y < 0)
-	{
-		snake->position.y = game->height - 1;
-	}
-	else if (snake->position.y > game->height)
-	{
-		snake->position.y = 0;
-	}
+    for (int i = 0; i < game->snake.length; i++)
+    {
+        WrapPosition(
+            &game->snake.positions[i]
+        );
+    }
+}
+void UpdateFood(Game *game)
+{
+    if (IsInSnake(&game->snake, game->food.position))
+    {
+        game->food.position = GenerateFood(&game->snake);
+        GrowSnake(&game->snake);
+        //later GrowSnake
+    }
 }
 
 void UpdateGame(Game *game)
 {
 	UpdateSnake(&game->snake);
 	WrapSnake(game);
+    UpdateFood(game);
 
 }
