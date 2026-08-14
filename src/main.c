@@ -1,4 +1,5 @@
 #include <raylib.h>
+#include <stdio.h>
 #include "config.h"
 #include "objects.h"
 #include "game.h"
@@ -9,11 +10,11 @@ int main(void)
 	SetTargetFPS(60);
 
 
-	Game game = CreateGame(BOARD_WIDTH,BOARD_HEIGHT); 
+	Game game = CreateGame(); 
 
 	float timer = 0.0f;
 
-	while (!WindowShouldClose()) 
+	while (!WindowShouldClose() && !game.dead) 
 	{
 
 		HandleInput(&game);
@@ -30,6 +31,9 @@ int main(void)
 		DrawGame(&game);
 		EndDrawing();
 	}
+    printf("Score: %d\n",game.snake.length);
+
+    DestroySnake(&game.snake);
 	CloseWindow();
 	return 0;
 }

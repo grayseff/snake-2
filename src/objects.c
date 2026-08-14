@@ -10,7 +10,7 @@ Snake GenerateSnake(void)
 
     snake.length=1;
     snake.capacity = 10;
-    snake.positions = malloc(snake.capacity * sizeof(Position));
+    snake.positions = malloc(snake.capacity *CHAR_SIZE* sizeof(Position));
     if (snake.positions == NULL)
     {
         fprintf(stderr, "Failed to Allocate Memory to Snake.\n");
@@ -33,7 +33,7 @@ void DestroySnake(Snake *snake)
 
 void UpdateSnake(Snake *snake)
 {
-    for (int i=snake->length -1; i > 0 ; i-- )
+    for (int i=snake->length*CHAR_SIZE -1; i > 0 ; i-- )
     {
         snake->positions[i] = snake->positions[i - 1];
     }
@@ -60,12 +60,14 @@ void UpdateSnake(Snake *snake)
 bool IsInSnake(Snake *snake, Position position)
 {
     
-    for (int i = 0; i<snake->length;i++)
+    for (int i = 0; i<snake->length*CHAR_SIZE;i++)
     {
-    if  (   position.x < snake->positions[i].x + CHAR_SIZE &&
-            position.x + CHAR_SIZE > snake->positions[i].x &&
-            position.y < snake->positions[i].y + CHAR_SIZE &&
-            position.y + CHAR_SIZE > snake->positions[i].y) {
+            Position snake_position = snake->positions[i*CHAR_SIZE];
+    
+    if  (   position.x < snake_position.x + CHAR_SIZE &&
+            position.x + CHAR_SIZE > snake_position.x &&
+            position.y < snake_position.y + CHAR_SIZE &&
+            position.y + CHAR_SIZE > snake_position.y) {
         return true;
         }
     }
@@ -74,17 +76,63 @@ bool IsInSnake(Snake *snake, Position position)
 }
 bool IsCannibal(Snake *snake)
 {
-    for (int i = 1; i<snake->length;i++)
-    {
-        if (    snake->positions[0].x < snake->positions[i].x + CHAR_SIZE &&
-                snake->positions[0].x + CHAR_SIZE > snake->positions[i].x &&
-                snake->positions[0].y < snake->positions[i].y + CHAR_SIZE &&
-                snake->positions[0].y + CHAR_SIZE > snake->positions[i].y)
-        {   return true;
+    Position head = snake->positions[0];
+
+    for (int i = 1; i < snake->length; i++)
+        {
+            Position body = snake->positions[i * CHAR_SIZE];
+
+            switch (snake->direction)
+            {
+                case RIGHT:
+                    // leading (right) edge of head
+                    if (head.x + CHAR_SIZE > body.x &&
+                        head.x + CHAR_SIZE <= body.x + CHAR_SIZE &&
+                        head.y >= body.y &&
+                        head.y + CHAR_SIZE <= body.y + CHAR_SIZE)
+                {
+                    return true;
+                }
+                    break;
+
+            case LEFT:
+                // leading (left) edge of head
+                if (head.x < body.x + CHAR_SIZE &&
+                    head.x >= body.x &&
+                    head.y >= body.y &&
+                    head.y + CHAR_SIZE <= body.y + CHAR_SIZE)
+                {
+                    return true;
+                }
+                break;
+
+            case DOWN:
+                // leading (bottom) edge of head
+                if (head.y + CHAR_SIZE > body.y &&
+                    head.y + CHAR_SIZE <= body.y + CHAR_SIZE &&
+                    head.x >= body.x &&
+                    head.x + CHAR_SIZE <= body.x + CHAR_SIZE)
+                {
+                    return true;
+                }
+                break;
+
+            case UP:
+                // leading (top) edge of head
+                if (head.y < body.y + CHAR_SIZE &&
+                    head.y >= body.y &&
+                    head.x >= body.x &&
+                    head.x + CHAR_SIZE <= body.x + CHAR_SIZE)
+                {
+                    return true;
+                }
+                break;
         }
     }
-        return false;
+
+    return false;
 }
+
 Position GenerateFood(Snake *snake)
 {
     Position position;
@@ -106,7 +154,7 @@ void GrowSnake(Snake *snake)
 
         Position *positions = realloc(
                 snake->positions,
-                snake->capacity * sizeof(Position)
+                snake->capacity *CHAR_SIZE* sizeof(Position)
                 );
         if (positions == NULL)
         {
@@ -115,23 +163,14 @@ void GrowSnake(Snake *snake)
         }
         snake->positions = positions;
     }
-    Position tail = snake->positions[snake->length - 1];
-    switch (snake->direction)
-    {
-        case UP:
-            tail.y +=CHAR_SIZE;
-            break;
-        case DOWN:
-            tail.y -= CHAR_SIZE;
-            break;
-        case LEFT:
-            tail.x += CHAR_SIZE;
-            break;
-        case RIGHT:
-            tail.x -= CHAR_SIZE;
-            break;
+    Position tail = snake->positions[snake->length*CHAR_SIZE - 1 ];
+
+    for (int i = snake->length * CHAR_SIZE;
+            i<(snake->length+1) * CHAR_SIZE;
+            i++) {
+        snake->positions[i] = tail;
     }
+
     snake->length++;
-    snake->positions[snake->length - 1] = tail;
 }
 

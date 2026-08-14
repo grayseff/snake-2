@@ -3,15 +3,6 @@
 #include <raylib.h>
 
 
-//void DrawSnake(Snake *snake)
-//{
-//	DrawRectangle(
-//			snake->position.x * GRID_SIZE ,
-//			snake->position.y * GRID_SIZE ,
-//			CELL_SIZE,
-//			CELL_SIZE,
-//			GREEN);
-//}
 void DrawSnake(Snake *snake)
 {
     for (int i = 0; i < snake->length; i++)
@@ -31,8 +22,8 @@ void DrawSnake(Snake *snake)
         };
 
         DrawRectangle(
-            snake->positions[i].x * GRID_SIZE,
-            snake->positions[i].y * GRID_SIZE,
+            snake->positions[i*CHAR_SIZE].x * GRID_SIZE,
+            snake->positions[i*CHAR_SIZE].y * GRID_SIZE,
             CELL_SIZE,
             CELL_SIZE,
             color

@@ -6,7 +6,7 @@
 Game CreateGame(void)
 {
 	Game game;
-
+    game.dead = false;
 	game.move_delay = 0.03f;
     game.snake = GenerateSnake();
     game.food.position = GenerateFood(&game.snake);
@@ -79,5 +79,7 @@ void UpdateGame(Game *game)
 	UpdateSnake(&game->snake);
 	WrapSnake(game);
     UpdateFood(game);
-
+    game->dead = IsCannibal(&game->snake);
 }
+
+
