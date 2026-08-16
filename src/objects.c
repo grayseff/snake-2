@@ -21,7 +21,7 @@ Snake GenerateSnake(void)
         BOARD_HEIGHT/2
     };
     snake.direction=RIGHT;
-    
+    snake.next_direction=RIGHT;  
 
 
     return snake;
@@ -33,6 +33,7 @@ void DestroySnake(Snake *snake)
 
 void UpdateSnake(Snake *snake)
 {
+    snake->direction = snake->next_direction;
     for (int i=snake->length*CHAR_SIZE -1; i > 0 ; i-- )
     {
         snake->positions[i] = snake->positions[i - 1];

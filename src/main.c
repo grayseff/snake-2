@@ -4,36 +4,47 @@
 #include "objects.h"
 #include "game.h"
 #include "render.h"
+#include "audio.h"
+
 int main(void)
 {
 	InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "snake2");
-	SetTargetFPS(60);
+	SetTargetFPS(TARGET_FPS);
+    InitAudio();
+    while (!WindowShouldClose())
+    {
+        Difficulty difficulty = RunMenu();
+        if(difficulty == QUIT){
+            return 0;
+        }
 
+	    Game game = CreateGame(); 
+        game.move_delay = GetMoveDelay(difficulty);
+	    float timer = 0.0f;
 
-	Game game = CreateGame(); 
+	    while (!WindowShouldClose() && !game.dead) 
+	    {
 
-	float timer = 0.0f;
+		    HandleInput(&game);
+		    timer += GetFrameTime();
 
-	while (!WindowShouldClose() && !game.dead) 
-	{
+		    if (timer >= game.move_delay)
+		    {
+			    UpdateGame(&game);
+			    timer -= game.move_delay;
+		    }
+            UpdateAudio();
 
-		HandleInput(&game);
-		timer += GetFrameTime();
-
-		if (timer >= game.move_delay)
-		{
-			UpdateGame(&game);
-			timer -= game.move_delay;
-		}
-
-		BeginDrawing();
-		ClearBackground(BLACK);
-		DrawGame(&game);
-		EndDrawing();
-	}
-    printf("Score: %d\n",game.snake.length);
-
-    DestroySnake(&game.snake);
+		    BeginDrawing();
+		    ClearBackground(BLACK);
+		    DrawGame(&game);
+		    EndDrawing();
+	    }
+        PlayDeathSound();
+        printf("Score: %d\n",game.snake.length);
+        DestroySnake(&game.snake);
+    }
+    DestroyAudio();
 	CloseWindow();
 	return 0;
 }

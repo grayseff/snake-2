@@ -6,7 +6,9 @@ LIBS = -lraylib
 SRC = src/main.c \
 	src/game.c \
 	src/objects.c \
-	src/render.c
+	src/render.c \
+	src/config.c \
+	src/audio.c
 
 
 

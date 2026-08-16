@@ -39,8 +39,23 @@ void DrawFood(Food *food)
             CELL_SIZE, 
             RED);
 }
+void DrawScore(Game *game)
+{
+    const int font_size=20;
+    const char *text = TextFormat("Score: %d", game->snake.length);
+
+    int width = MeasureText(text, font_size);
+    DrawText(
+            text,
+            WINDOW_WIDTH - width - 10,
+            WINDOW_HEIGHT - font_size - 10,
+            font_size,
+            WHITE
+            );
+}
 void DrawGame(Game *game)
 {	
 	DrawSnake(&game->snake);
     DrawFood(&game->food);
+    DrawScore(game);
 }

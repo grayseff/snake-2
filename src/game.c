@@ -3,11 +3,12 @@
 #include <raylib.h>
 #include <stdio.h>
 #include "config.h"
+#include "audio.h"
 Game CreateGame(void)
 {
 	Game game;
     game.dead = false;
-	game.move_delay = 0.03f;
+	game.move_delay = 0.05f;
     game.snake = GenerateSnake();
     game.food.position = GenerateFood(&game.snake);
 
@@ -20,19 +21,19 @@ void HandleInput(Game *game)
 {
 	if (IsKeyPressed(KEY_UP) && game->snake.direction != DOWN)
 	{
-		game->snake.direction = UP;
+		game->snake.next_direction = UP;
 	}
 	if (IsKeyPressed(KEY_DOWN) && game->snake.direction != UP)
 	{
-		game->snake.direction = DOWN;
+		game->snake.next_direction = DOWN;
 	}
 	if (IsKeyPressed(KEY_LEFT) && game->snake.direction != RIGHT)
 	{
-		game->snake.direction = LEFT;
+		game->snake.next_direction = LEFT;
 	}
-	if (IsKeyPressed(KEY_RIGHT) && game->snake.direction != LEFT)
+	if (IsKeyPressed(KEY_RIGHT) && game->snake.direction    != LEFT)
 	{
-		game->snake.direction = RIGHT;
+		game->snake.next_direction = RIGHT;
 	}
 }
 void WrapPosition(Position *position)
@@ -70,6 +71,7 @@ void UpdateFood(Game *game)
     {
         game->food.position = GenerateFood(&game->snake);
         GrowSnake(&game->snake);
+        PlayEatSound();
         //later GrowSnake
     }
 }
@@ -78,8 +80,8 @@ void UpdateGame(Game *game)
 {
 	UpdateSnake(&game->snake);
 	WrapSnake(game);
-    UpdateFood(game);
     game->dead = IsCannibal(&game->snake);
+    UpdateFood(game);
 }
 
 

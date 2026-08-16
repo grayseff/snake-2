@@ -5,20 +5,18 @@ Having implemented basic TUI snake in rust, and wanting to move on to systems pr
 This project is to learn the syntax and formalism of C to determine what exactly Rust and even Zig are hiding from me, while also having some fun.
 
 # Goals:
-- [ ] Learn modern C
-- [ ] Practice modular design
-- [ ] Use raylib for graphics, audio and input
+- [x] Learn modern C
+- [x] Practice modular design
+- [x] Use raylib for graphics, audio and input
 
 # Features 
 - Classic snake gameplay
 - More complex food/interactions
 - Increasing speed
 - Score tracking
+- audio
 ## Presentation
-- Sprite based graphics
-- particle effects 
 - sound 
 - menus 
 
-# Structure 
 

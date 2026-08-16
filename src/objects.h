@@ -20,6 +20,7 @@ typedef struct
     int length;
     int capacity;
 	Direction direction;
+    Direction next_direction;
 } Snake;
 
 typedef struct
