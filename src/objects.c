@@ -16,10 +16,11 @@ Snake GenerateSnake(void)
         fprintf(stderr, "Failed to Allocate Memory to Snake.\n");
         exit(EXIT_FAILURE);
     }
-    snake.positions[0] = (Position){
-        BOARD_WIDTH/2,
-        BOARD_HEIGHT/2
-    };
+    for (int i = 0; i < CHAR_SIZE; i++)
+    {
+        snake.positions[i].x = BOARD_WIDTH / 2 - i;
+        snake.positions[i].y = BOARD_HEIGHT / 2;
+    }
     snake.direction=RIGHT;
     snake.next_direction=RIGHT;  
 
@@ -63,7 +64,7 @@ bool IsInSnake(Snake *snake, Position position)
     
     for (int i = 0; i<snake->length*CHAR_SIZE;i++)
     {
-            Position snake_position = snake->positions[i*CHAR_SIZE];
+            Position snake_position = snake->positions[i];
     
     if  (   position.x < snake_position.x + CHAR_SIZE &&
             position.x + CHAR_SIZE > snake_position.x &&
