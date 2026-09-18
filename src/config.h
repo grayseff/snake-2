@@ -12,7 +12,7 @@
 #define WINDOW_WIDTH  (BOARD_WIDTH * GRID_SIZE)
 #define WINDOW_HEIGHT (BOARD_HEIGHT * GRID_SIZE)
 
-#define TARGET_FPS   60
+#define TARGET_FPS   30
 
 typedef enum
 {
